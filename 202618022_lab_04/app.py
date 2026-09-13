@@ -1,7 +1,8 @@
+import os
+import pickle
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
 
 st.set_page_config(
     page_title="NYC Airbnb Price Predictor",
@@ -11,7 +12,6 @@ st.set_page_config(
 
 @st.cache_resource
 def load_artifacts():
-    # Resolves the exact folder where app.py lives:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, "airbnb_model_artifacts.pkl")
     with open(file_path, "rb") as f:
