@@ -11,7 +11,11 @@ st.set_page_config(
 
 @st.cache_resource
 def load_artifacts():
-    return joblib.load("airbnb_price_artifacts.joblib")
+    # Resolves the exact folder where app.py lives:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "airbnb_model_artifacts.pkl")
+    with open(file_path, "rb") as f:
+        return pickle.load(f)
 
 artifacts = load_artifacts()
 
