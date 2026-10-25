@@ -1,78 +1,60 @@
-# DS605 Lab 8: Decision Trees and Support Vector Machines
+# DS605 Lab 8 — Decision Trees & Support Vector Machines from Scratch
 
-## Overview
-This assignment focuses on implementing Decision Tree and Linear Support Vector Machine (SVM) classifiers from scratch and comparing them with Scikit-learn implementations using the UCI Banknote Authentication dataset.
+UCI **Banknote Authentication** dataset (1,372 samples, 4 features, genuine vs forged).
+Decision Tree and Linear SVM are implemented **from scratch with NumPy/Pandas**, compared with scikit-learn, extended with kernel SVMs, and benchmarked together on all four features.
 
-## Dataset
-**UCI Banknote Authentication Dataset**
-- Samples: 1,372
-- Features: 4
-- Classes: 2
-- Features: Variance, Skewness, Curtosis, and Entropy
+## Repository contents
+| Path | Description |
+|---|---|
+| `DS605_Lab8_Decision_Tree_SVM.ipynb` | Full runnable notebook (Parts A–D), executed with outputs included |
+| `data_banknote_authentication.txt` | Dataset |
+| `plots/` | All decision-boundary, margin, tree and comparison figures |
+| `results/` | CSV tables: depth/criterion study, `C` / learning-rate / iteration studies, kernel comparison, final comparison |
 
-## Part A: Decision Tree from Scratch
-- Implemented Gini impurity and entropy.
-- Developed recursive tree construction with stopping conditions.
-- Implemented prediction and feature-threshold split rules.
-- Visualized the manual tree and decision boundaries.
-- Compared the manual implementation with Scikit-learn Decision Tree.
+Run it: `pip install -r requirements.txt` then `jupyter notebook DS605_Lab8_Decision_Tree_SVM.ipynb` (Run All). Everything uses `random_state = 42`.
 
-## Part B: Linear SVM from Scratch
-- Implemented a linear soft-margin SVM using hinge loss and subgradient descent.
-- Scaled features using training-set statistics.
-- Visualized the separating boundary, margins, and margin-violating samples.
-- Compared the manual implementation with Scikit-learn Linear SVM.
-- Explored the effects of regularization (C), learning rate, and iterations.
+## What was implemented
+- **Decision tree (`DecisionTreeScratch`)** — Gini and entropy, vectorised threshold search (midpoints of sorted values, cumulative class counts), recursive growth, stopping rules (pure node, `max_depth`, `min_samples_split`, `min_samples_leaf`, minimum gain), prediction, rule export and a drawn tree.
+- **Linear soft-margin SVM (`LinearSVMScratch`)** — labels mapped to ±1, features scaled with training-set statistics, hinge loss + L2, full-batch sub-gradient descent, learning-rate decay. Objective is normalised so `C` has the same meaning as in scikit-learn.
+- **Own helpers (no sklearn):** stratified train/test split, standard scaler, stratified k-fold, accuracy/precision/recall/F1 (cross-checked against scikit-learn).
+- scikit-learn is used only for comparison models, `make_moons`/`make_circles`, and a grid search for the RBF SVM.
+- One stratified 80/20 split (1,098 train / 274 test) is reused by every model. 2-D plots use `variance` + `skewness`; final metrics use all four features.
 
-## Part C: Kernel SVM
-- Generated a nonlinear dataset using `make_moons`.
-- Trained SVM models using Linear, Polynomial, and RBF kernels.
-- Visualized and compared their decision boundaries.
-- Explored how nonlinear kernels handle complex data patterns.
+## Key figures
+| | |
+|---|---|
+| Manual vs sklearn tree boundaries | ![](plots/A1_tree_boundaries_manual_vs_sklearn.png) |
+| Manual tree visualisation | ![](plots/A2_manual_tree_visualisation.png) |
+| Manual vs sklearn linear SVM (margins, violators in red) | ![](plots/B1_linear_svm_manual_vs_sklearn.png) |
+| Effect of `C` | ![](plots/B3_effect_of_C_manual.png) |
+| Linear / polynomial / RBF kernels | ![](plots/C1_kernel_svm_boundaries.png) |
+| Final metrics and timing | ![](plots/D4_metrics_and_timing.png) |
 
-## Part D: Final Model Comparison
-Evaluated the following models using all four Banknote dataset features:
-- Manual Decision Tree
-- Scikit-learn Decision Tree
-- Manual Linear SVM
-- Scikit-learn Linear SVM
-- Scikit-learn RBF SVM
+## Results
+**Part A (tree, 2 features).** Manual and scikit-learn trees give identical predictions (Gini, depth 4: 13 leaves, train 0.943 / test 0.934, 100 % agreement). Training accuracy goes to 1.0 as depth grows but test accuracy peaks at ~0.94 around depth 3–6 and then falls (0.931 unrestricted, 71 leaves) → over-fitting. Gini and entropy behave almost the same.
 
-### Evaluation Metrics
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- Training time
-- Prediction time
+**Part B (linear SVM, 2 features).** Manual solution ≈ scikit-learn (same objective value, weight cosine similarity 0.9998, identical test predictions, 0.887 accuracy). The two features are not linearly separable, so ~31 % of training points violate the margin. Small `C` → wide margin (3.4 at C=0.001, ~0.95 for C≥10); accuracy barely changes. Learning rates ≤ 0.001 do not converge in 1000 iterations, ≥ 0.1 do; the objective gap shrinks steadily with iterations while test accuracy stabilises after ~10.
+
+**Part C (kernels).** Linear kernel: 0.87 on moons and 0.48 (chance) on circles. Polynomial / RBF: 0.91 / 0.92 on moons and 0.99 / 0.99 on circles. A nonlinear kernel implicitly maps the data to a space where a linear separator exists; `gamma` controls under- vs over-fitting.
+
+**Part D (all 4 features, same split).**
+
+| Model | Train acc | Test acc | Precision | Recall | F1 | Fit (ms) | Predict (ms) |
+|---|---|---|---|---|---|---|---|
+| Decision tree – manual (depth 6) | 0.998 | 0.989 | 0.976 | 1.000 | 0.988 | ≈5 | ≈0.06 |
+| Decision tree – sklearn | 0.998 | 0.989 | 0.976 | 1.000 | 0.988 | ≈2 | ≈0.08 |
+| Linear SVM – manual | 0.985 | 0.982 | 0.961 | 1.000 | 0.980 | ≈176 | ≈0.01 |
+| Linear SVM – sklearn | 0.985 | 0.982 | 0.961 | 1.000 | 0.980 | ≈7 | ≈0.3 |
+| RBF SVM – sklearn (C=1, γ=0.5) | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | ≈4 | ≈0.7 |
+
+(Timings vary slightly from run to run; exact values are in `results/D_final_comparison.csv`.)
 
 ## Observations
-- Decision Trees provide interpretable predictions through feature-threshold split rules.
-- Gini impurity and entropy help determine suitable tree splits.
-- Tree depth influences model complexity and generalization.
-- Feature scaling is important for SVM models.
-- Nonlinear kernels can learn complex decision boundaries.
-- Evaluation metrics help compare classification performance.
-- Manual implementations provide insight into the underlying algorithms, while Scikit-learn offers optimized implementations.
+- **Features matter most:** 2 features cap tree/linear models at ~0.89–0.94; with all 4 features every model is ≥ 0.98.
+- **Implementations agree:** the manual tree equals scikit-learn's; the manual SVM converges to scikit-learn's weights given enough iterations (it needed `lr=1.0`, 5000 iterations on 4 features) but is ~25× slower to train.
+- **Interpretability:** tree (readable if/else rules) > linear SVM (5 signed weights, on scaled inputs) > RBF SVM (83 support vectors, black box).
+- **Scaling:** trees are scale-invariant (identical predictions); SVMs need training-set scaling. Here features have similar magnitudes, so the measured effect was small — it matters much more with mixed units.
+- **Overfitting / complexity:** unrestricted tree → 100 % train accuracy; CV picked depth 6. Linear SVM has the smallest train–test gap. RBF SVM has the highest capacity but was tuned by cross-validation on the training set only.
+- **Prediction cost:** tree and linear SVM are cheapest; RBF SVM grows with the number of support vectors.
+- **Caveats:** the test set has only 274 rows (1 error ≈ 0.4 points), so tree vs linear SVM differences are a few samples. The dataset has 24 duplicate rows (9 test rows duplicate a training row); excluding them does not change the ranking. All errors are false positives (genuine flagged as forged) — recall is 1.0 for every model.
 
-## Conclusion
-- Implemented Decision Tree and Linear SVM algorithms from scratch.
-- Compared manual implementations with Scikit-learn models.
-- Visualized decision boundaries, tree structures, and SVM margins.
-- Explored hyperparameter tuning and nonlinear SVM kernels.
-- Evaluated models using standard classification metrics and execution time.
-
-## Technologies Used
-- Python
-- NumPy
-- Pandas
-- Matplotlib
-- Scikit-learn
-- Jupyter Notebook
-
-## How to Run
-1. Clone or download the repository.
-2. Open the Jupyter Notebook in Jupyter Notebook or VS Code.
-3. Install the required Python libraries if they are not already installed.
-4. Run the notebook cells sequentially.
-5. Review the generated visualizations, comparison tables, and results.
