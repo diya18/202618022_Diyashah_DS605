@@ -1,1 +1,73 @@
+# DS605 Lab 8: Decision Trees and Support Vector Machines
+
+## Overview
+This assignment explores Decision Tree and Support Vector Machine (SVM) classification using the UCI Banknote Authentication dataset. Decision Tree and Linear SVM algorithms are implemented from scratch and compared with Scikit-learn implementations.
+
+## Dataset
+**UCI Banknote Authentication Dataset**
+- Samples: 1,372
+- Features: 4
+- Classes: 2
+- Features: Variance, Skewness, Curtosis, and Entropy
+
+## Implementation
+
+### Part A: Decision Tree from Scratch
+- Implemented Gini impurity and entropy.
+- Developed recursive tree construction with stopping conditions.
+- Implemented prediction and feature-threshold split rules.
+- Visualized the manual tree and decision boundaries.
+- Compared results with Scikit-learn Decision Trees.
+
+### Part B: Linear SVM from Scratch
+- Implemented a linear soft-margin SVM using hinge loss and subgradient descent.
+- Scaled features using training-set statistics.
+- Visualized the separating boundary, margins, and margin-violating samples.
+- Compared the manual implementation with Scikit-learn Linear SVM.
+- Explored the effects of regularization, learning rate, and iterations.
+
+### Part C: Kernel SVM
+- Generated a nonlinear dataset using `make_moons`.
+- Trained SVM models with Linear, Polynomial, and RBF kernels.
+- Visualized and compared their decision boundaries.
+
+### Part D: Final Model Comparison
+Evaluated the following models using all four Banknote dataset features:
+- Manual Decision Tree
+- Scikit-learn Decision Tree
+- Manual Linear SVM
+- Scikit-learn Linear SVM
+- Scikit-learn RBF SVM
+
+The models were evaluated using:
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- Training time
+- Prediction time
+
+## Observations
+- Decision Trees provide interpretable predictions through feature-threshold split rules.
+- Gini impurity and entropy can be used to select tree splits.
+- Tree depth influences model complexity and can affect generalization.
+- Feature scaling is important for SVM models.
+- Nonlinear kernels can learn more complex decision boundaries than linear kernels.
+- Comparing multiple evaluation metrics provides a more complete understanding of model performance.
+- Manual implementations help explain the underlying algorithms, while Scikit-learn provides optimized implementations.
+
+## Conclusion
+This assignment provided practical experience in implementing classification algorithms from scratch, visualizing decision boundaries, tuning hyperparameters, exploring SVM kernels, and comparing models using standard evaluation metrics.
+
+## Technologies Used
+- Python
+- NumPy
+- Pandas
+- Matplotlib
+- Scikit-learn
+- Jupyter Notebook
+
+
+
+
 
