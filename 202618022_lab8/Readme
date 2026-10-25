@@ -1,7 +1,7 @@
 # DS605 Lab 8: Decision Trees and Support Vector Machines
 
 ## Overview
-This assignment explores Decision Tree and Support Vector Machine (SVM) classification using the UCI Banknote Authentication dataset. Decision Tree and Linear SVM algorithms are implemented from scratch and compared with Scikit-learn implementations.
+This assignment focuses on implementing Decision Tree and Linear Support Vector Machine (SVM) classifiers from scratch and comparing them with Scikit-learn implementations using the UCI Banknote Authentication dataset.
 
 ## Dataset
 **UCI Banknote Authentication Dataset**
@@ -10,28 +10,27 @@ This assignment explores Decision Tree and Support Vector Machine (SVM) classifi
 - Classes: 2
 - Features: Variance, Skewness, Curtosis, and Entropy
 
-## Implementation
-
-### Part A: Decision Tree from Scratch
+## Part A: Decision Tree from Scratch
 - Implemented Gini impurity and entropy.
 - Developed recursive tree construction with stopping conditions.
 - Implemented prediction and feature-threshold split rules.
 - Visualized the manual tree and decision boundaries.
-- Compared results with Scikit-learn Decision Trees.
+- Compared the manual implementation with Scikit-learn Decision Tree.
 
-### Part B: Linear SVM from Scratch
+## Part B: Linear SVM from Scratch
 - Implemented a linear soft-margin SVM using hinge loss and subgradient descent.
 - Scaled features using training-set statistics.
 - Visualized the separating boundary, margins, and margin-violating samples.
 - Compared the manual implementation with Scikit-learn Linear SVM.
-- Explored the effects of regularization, learning rate, and iterations.
+- Explored the effects of regularization (C), learning rate, and iterations.
 
-### Part C: Kernel SVM
+## Part C: Kernel SVM
 - Generated a nonlinear dataset using `make_moons`.
-- Trained SVM models with Linear, Polynomial, and RBF kernels.
+- Trained SVM models using Linear, Polynomial, and RBF kernels.
 - Visualized and compared their decision boundaries.
+- Explored how nonlinear kernels handle complex data patterns.
 
-### Part D: Final Model Comparison
+## Part D: Final Model Comparison
 Evaluated the following models using all four Banknote dataset features:
 - Manual Decision Tree
 - Scikit-learn Decision Tree
@@ -39,7 +38,7 @@ Evaluated the following models using all four Banknote dataset features:
 - Scikit-learn Linear SVM
 - Scikit-learn RBF SVM
 
-The models were evaluated using:
+### Evaluation Metrics
 - Accuracy
 - Precision
 - Recall
@@ -49,15 +48,19 @@ The models were evaluated using:
 
 ## Observations
 - Decision Trees provide interpretable predictions through feature-threshold split rules.
-- Gini impurity and entropy can be used to select tree splits.
-- Tree depth influences model complexity and can affect generalization.
+- Gini impurity and entropy help determine suitable tree splits.
+- Tree depth influences model complexity and generalization.
 - Feature scaling is important for SVM models.
-- Nonlinear kernels can learn more complex decision boundaries than linear kernels.
-- Comparing multiple evaluation metrics provides a more complete understanding of model performance.
-- Manual implementations help explain the underlying algorithms, while Scikit-learn provides optimized implementations.
+- Nonlinear kernels can learn complex decision boundaries.
+- Evaluation metrics help compare classification performance.
+- Manual implementations provide insight into the underlying algorithms, while Scikit-learn offers optimized implementations.
 
 ## Conclusion
-This assignment provided practical experience in implementing classification algorithms from scratch, visualizing decision boundaries, tuning hyperparameters, exploring SVM kernels, and comparing models using standard evaluation metrics.
+- Implemented Decision Tree and Linear SVM algorithms from scratch.
+- Compared manual implementations with Scikit-learn models.
+- Visualized decision boundaries, tree structures, and SVM margins.
+- Explored hyperparameter tuning and nonlinear SVM kernels.
+- Evaluated models using standard classification metrics and execution time.
 
 ## Technologies Used
 - Python
@@ -67,7 +70,9 @@ This assignment provided practical experience in implementing classification alg
 - Scikit-learn
 - Jupyter Notebook
 
-
-
-
-
+## How to Run
+1. Clone or download the repository.
+2. Open the Jupyter Notebook in Jupyter Notebook or VS Code.
+3. Install the required Python libraries if they are not already installed.
+4. Run the notebook cells sequentially.
+5. Review the generated visualizations, comparison tables, and results.
